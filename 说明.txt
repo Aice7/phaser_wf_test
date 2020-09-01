@@ -1,0 +1,18 @@
+1.初始化npm
+npm init -y
+2.检测是否安装了webpack
+npm install webpack -g
+3.安装webpack
+npm i webpack webpack-cli webpack-dev-server -D
+4.安装tsc
+npm install typescript ts-loader --D
+5.初始化tsc 抄作业进行初始配置
+tsc --init
+5.配置webpack的配置
+创建webpack.config.js
+配置入口、输出目录、loader、plugin
+6.配置开发服务器
+-----------------------------------------
+其他配置
+-----------------------------------------
+处理图片 url-loader npm i url-loader -D
