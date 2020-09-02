@@ -12,7 +12,11 @@ tsc --init
 创建webpack.config.js
 配置入口、输出目录、loader、plugin
 6.配置开发服务器
+webpack-dev-server
 -----------------------------------------
 其他配置
 -----------------------------------------
 处理图片 url-loader npm i url-loader -D
+静态资源处理 copy-webpack-plugin -D
+主角 Phaser  npm i phaser -D
+-----------------------------------------

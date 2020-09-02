@@ -1,6 +1,8 @@
 const path = require('path');
-const isDev = process.env.NODE_ENV == 'development';
-const webpack = require('webpack')
+// const isDev = process.env.NODE_ENV == 'development';
+const isDev = false;
+const webpack = require('webpack');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
   mode: 'production',
   entry: './src/index.ts',
@@ -23,8 +25,8 @@ module.exports = {
           // loader: 'file-loader',
           loader: 'url-loader',
           options: {
-            name: '[name]_[hash].[ext]',
-            outputPath: 'images/',
+            name: '[name].[ext]',
+            outputPath: 'assets/img/',
             limit: 8192,
           },
         },
@@ -39,10 +41,18 @@ module.exports = {
     path: path.resolve(__dirname, 'dist')
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV:isDev?'"development"':'"production"'
-      }
+    // new webpack.DefinePlugin({
+    //   PRODUCTION: JSON.stringify(true),
+    //   'process.env': {
+    //     NODE_ENV:isDev?'"development"':'"production"'
+    //   }
+    // }),
+    new CopyWebpackPlugin({
+      patterns:[{
+        from: __dirname + '/src/assets',
+        to: __dirname + '/dist/assets',
+        toType:'dir'
+      }],
     })
   ]
 }
