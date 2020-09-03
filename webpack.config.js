@@ -34,7 +34,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: [ '.tsx', '.ts', '.js' ]
+    extensions: ['.tsx', '.ts', '.js']
   },
   output: {
     filename: 'bundle.js',
@@ -48,10 +48,14 @@ module.exports = {
     //   }
     // }),
     new CopyWebpackPlugin({
-      patterns:[{
+      patterns: [{
         from: __dirname + '/src/assets',
         to: __dirname + '/dist/assets',
-        toType:'dir'
+        toType: 'dir'
+      }, {
+        from: __dirname + '/src/index.html',
+        to: __dirname + '/dist/index.html',
+        toType: 'file'
       }],
     })
   ]

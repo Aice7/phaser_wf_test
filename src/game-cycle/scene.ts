@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import helpTool from '../help-tools/common-help';
 export default class MyScene extends Phaser.Scene {
   // 这个是静止的拱型？？？？ 
   // Arcade 是物理引擎
@@ -31,7 +32,7 @@ export default class MyScene extends Phaser.Scene {
   }
   // 加载之后
   create() {
-    console.log('create');
+    helpTool.slog('create')
     // 将图片显示出来
     this.add.image(400, 300, 'sky');
     // 台子 某种材质？？？
@@ -87,12 +88,14 @@ export default class MyScene extends Phaser.Scene {
       fill:'#000'
     })
 
-    // 创建炸弹
+    // 创建炸弹组
     this.bombs = this.physics.add.group();
 
     // 监听 物体之间的碰撞
     this.physics.add.collider(player, platforms);
     this.physics.add.collider(this.stars, platforms);
+    this.physics.add.collider(player, this.bombs,this.hitBomb,null,this);
+    // 碰撞回调函数
     this.physics.add.collider(this.bombs, platforms);
     // 这里必须传入的this，上下文环境环境 
     this.physics.add.overlap(player,this.stars,this.collectStar,null,this)
@@ -123,6 +126,10 @@ export default class MyScene extends Phaser.Scene {
     s.disableBody(true, true);
     this.score += 1;
     this.scoreText.setText('得分：' + this.score);
+    if (this.stars.countActive(true)==0) {
+      this.refreshStars()
+    }
+    this.createBomb()
   }
   // 迭代小星星
   starsIterate(child:Phaser.GameObjects.GameObject) {
@@ -132,5 +139,24 @@ export default class MyScene extends Phaser.Scene {
   // 遇到星星
   hitBomb(player: Phaser.GameObjects.GameObject, bomb: Phaser.GameObjects.GameObject) {
     const p = <Phaser.Physics.Arcade.Sprite>player, b = <Phaser.Physics.Arcade.Sprite>bomb;
+    this.physics.pause();
+    p.setTint(0xff0000);
+    p.anims.play('dude_turn');
+  }
+  // 生成炸弹
+  createBomb() {
+    const dude = this.dude;
+    const x = dude.x <= 400 ? Phaser.Math.Between(400, 800) : Phaser.Math.Between(0, 400);
+    const bomb:Phaser.Physics.Arcade.Sprite = this.bombs.create(x, 16, 'bomb');
+    bomb.setBounce(1);
+    bomb.setCollideWorldBounds(true);
+    bomb.setVelocity(Phaser.Math.Between(-200, 200), 20);
+  }
+  // 刷新星星
+  refreshStars(){
+    this.stars.children.iterate((child) => {
+      let s = <Phaser.Physics.Arcade.Sprite>child;
+      s.enableBody(true, s.x, 0, true, true);
+    })
   }
 }
